@@ -60,7 +60,6 @@ public class PercolationStats {
     }
 
     public static void main(String[] args) {
-
         int n = 200;
         int t = 100;
         PercolationStats ps = new PercolationStats(n, t);
