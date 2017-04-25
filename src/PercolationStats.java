@@ -3,7 +3,6 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    // Fraction of open sites in computational experiment t
     private double[] x;
     private int times;
     private double meanValue;
