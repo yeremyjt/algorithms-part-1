@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree
 {
@@ -95,6 +96,23 @@ public class KdTree
             else
                 return contains(node.rt, p);
         }
+    }
+
+    public void draw()
+    {
+        draw(root);
+    }
+
+    private void draw(Node node)
+    {
+        if (node == null) return;
+
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.01);
+        node.p.draw();
+
+        draw(node.lb);
+        draw(node.rt);
     }
 
     public static void main(String[] args)
