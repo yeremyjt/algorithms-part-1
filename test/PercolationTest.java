@@ -1,4 +1,3 @@
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -18,6 +17,7 @@ public class PercolationTest
     public void isFull() throws Exception
     {
         Percolation percolation = new Percolation(4);
+
         assertTrue(!percolation.isFull(1, 3));
         percolation.open(1, 3);
         assertTrue(percolation.isFull(1, 3));

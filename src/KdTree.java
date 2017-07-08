@@ -25,46 +25,6 @@ public class KdTree
         public enum Direction {
             VERTICAL, HORIZAONTAL;
         }
-
-        public Point2D getP() {
-            return p;
-        }
-
-        public void setP(Point2D p) {
-            this.p = p;
-        }
-
-        public RectHV getRect() {
-            return rect;
-        }
-
-        public void setRect(RectHV rect) {
-            this.rect = rect;
-        }
-
-        public Node getLb() {
-            return lb;
-        }
-
-        public void setLb(Node lb) {
-            this.lb = lb;
-        }
-
-        public Node getRt() {
-            return rt;
-        }
-
-        public void setRt(Node rt) {
-            this.rt = rt;
-        }
-
-        public Direction getDirection() {
-            return direction;
-        }
-
-        public void setDirection(Direction direction) {
-            this.direction = direction;
-        }
     }
 
     public boolean isEmpty()
@@ -79,21 +39,72 @@ public class KdTree
 
     public void insert(Point2D p)
     {
-        root = insert(root, p);
+        root = insert(root, p, Node.Direction.VERTICAL);
     }
 
-    private Node insert(Node node, Point2D p)
+    private Node insert(Node node, Point2D p, Node.Direction direction)
     {
         if (node == null)
         {
+            if (contains(p))
+            {
+                return null;
+            }
             size++;
-            return new Node(p, null, null, null, Node.Direction.VERTICAL);
+            return new Node(p, null, null, null, direction);
         }
-        if (node.getDirection() == Node.Direction.VERTICAL)
+
+        if (node.direction == Node.Direction.VERTICAL)
         {
-            if (p.x() < node.p.x())        node.lb = insert(node.lb, p);
-            else if (p.x() > node.p.x())   node.rt = insert(node.rt, p);
+            if (p.x() < node.p.x())        node.lb = insert(node.lb, p, Node.Direction.HORIZAONTAL);
+            else                           node.rt = insert(node.rt, p, Node.Direction.HORIZAONTAL);
         }
+        else
+        {
+            if (p.y() < node.p.y())        node.lb = insert(node.lb, p, Node.Direction.VERTICAL);
+            else                           node.rt = insert(node.rt, p, Node.Direction.VERTICAL);
+        }
+
         return node;
+    }
+
+    public boolean contains(Point2D p)
+    {
+        return contains(root, p);
+    }
+
+    private boolean contains(Node node, Point2D p)
+    {
+        if (node == null) return false;
+
+        if (node.p.x() == p.x() && node.p.y() == p.y())
+        {
+            return true;
+        }
+        else if (node.direction == Node.Direction.VERTICAL)
+        {
+            if (p.x() < node.p.x())
+                return contains(node.lb, p);
+            else
+                return contains(node.rt, p);
+        }
+        else
+        {
+            if (p.y() < node.p.y())
+                return contains(node.lb, p);
+            else
+                return contains(node.rt, p);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        KdTree kdTree = new KdTree();
+        Point2D point2D1 = new Point2D(1, 1);
+        Point2D point2D2 = new Point2D(1, 2);
+
+        kdTree.insert(point2D1);
+        kdTree.insert(point2D2);
+
     }
 }
