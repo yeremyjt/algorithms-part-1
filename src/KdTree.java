@@ -2,6 +2,9 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KdTree
 {
     private Node root;
@@ -26,7 +29,7 @@ public class KdTree
 
         public enum Direction
         {
-            VERTICAL, HORIZAONTAL;
+            VERTICAL, HORIZONTAL;
         }
     }
 
@@ -65,7 +68,7 @@ public class KdTree
                 node.lb = insert(
                         node.lb,
                         p,
-                        Node.Direction.HORIZAONTAL,
+                        Node.Direction.HORIZONTAL,
                         node.rect.xmin(),
                         node.rect.ymin(),
                         node.p.x(), // xmax
@@ -75,7 +78,7 @@ public class KdTree
                 node.rt = insert(
                         node.rt,
                         p,
-                        Node.Direction.HORIZAONTAL,
+                        Node.Direction.HORIZONTAL,
                         node.p.x(), // xmin
                         node.rect.ymin(),
                         node.rect.xmax(),
@@ -168,6 +171,29 @@ public class KdTree
         draw(node.lb);
         draw(node.rt);
     }
+
+    public Iterable<Point2D> range(RectHV rect)
+    {
+        List<Point2D> points = new ArrayList<>();
+        return range(root, rect, points);
+    }
+
+    private List<Point2D> range(Node node, RectHV rect, List<Point2D> points)
+    {
+        if (node.lb == null && node.rt == null) // Leaf node
+        {
+            if (rect.contains(node.p))
+            {
+                points.add(node.p);
+            }
+        }
+
+        if (node.lb != null && node.lb.rect.intersects(rect)) range(node.lb, rect, points);
+        if (node.rt != null && node.rt.rect.intersects(rect)) range(node.rt, rect, points);
+
+        return points;
+    }
+
 
     public static void main(String[] args)
     {
