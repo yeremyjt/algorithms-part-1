@@ -188,8 +188,8 @@ public class KdTree
             }
         }
 
-        if (node.lb != null && node.lb.rect.intersects(rect)) range(node.lb, rect, points);
-        if (node.rt != null && node.rt.rect.intersects(rect)) range(node.rt, rect, points);
+        if (node.lb != null && node.lb.rect.intersects(rect)) return range(node.lb, rect, points);
+        if (node.rt != null && node.rt.rect.intersects(rect)) return range(node.rt, rect, points);
 
         return points;
     }
