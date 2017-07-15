@@ -180,20 +180,38 @@ public class KdTree
 
     private List<Point2D> range(Node node, RectHV rect, List<Point2D> points)
     {
-        if (node.lb == null && node.rt == null) // Leaf node
-        {
-            if (rect.contains(node.p))
-            {
-                points.add(node.p);
-            }
-        }
+        if (node == null) return points;
+        if (rect.contains(node.p)) points.add(node.p);
 
-        if (node.lb != null && node.lb.rect.intersects(rect)) return range(node.lb, rect, points);
-        if (node.rt != null && node.rt.rect.intersects(rect)) return range(node.rt, rect, points);
+        if (node.lb != null && node.lb.rect.intersects(rect)) range(node.lb, rect, points);
+        if (node.rt != null && node.rt.rect.intersects(rect)) range(node.rt, rect, points);
 
         return points;
     }
 
+    public Point2D nearest(Point2D p)
+    {
+        // Check distance from query from point in node to query point
+        // Recursively search left/bottom (if it could contain a closer point)
+        // Recursively search right/top (if it could contain a closer point)
+        // Organize method so that it begins by searching for query point
+        // Keep shortestDistanceFoundSoFar variable as well as championNearestNeighbor
+        return nearest(root, p, Double.MAX_VALUE, null);
+    }
+
+    private Point2D nearest(Node node, Point2D p, Double shortestDistance, Point2D championNearestNeighbor)
+    {
+        if (node.p.distanceSquaredTo(p) < shortestDistance)
+        {
+            shortestDistance = node.p.distanceSquaredTo(p);
+            championNearestNeighbor = node.p;
+        }
+
+        if (node.lb != null && node.lb.p.distanceSquaredTo(p) < shortestDistance) nearest(node.lb, p, shortestDistance, championNearestNeighbor);
+        if (node.rt != null && node.rt.p.distanceSquaredTo(p) < shortestDistance) nearest(node.rt, p, shortestDistance, championNearestNeighbor);
+
+        return championNearestNeighbor;
+    }
 
     public static void main(String[] args)
     {
