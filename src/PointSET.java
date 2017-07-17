@@ -65,11 +65,8 @@ public class PointSET
         if (p == null) throw new IllegalArgumentException();
         Double shortestDistance = Double.MAX_VALUE;
         Point2D nearestNeighbor = null;
-        Iterator<Point2D> treeIterator =  treeSet.descendingIterator();
-        List<Point2D> treeList = new ArrayList<>();
-        treeIterator.forEachRemaining(treeList::add);
 
-        for (Point2D point : treeList)
+        for (Point2D point : treeSet)
         {
             if (point.distanceSquaredTo(p) < shortestDistance)
             {

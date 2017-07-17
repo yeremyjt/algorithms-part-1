@@ -196,21 +196,66 @@ public class KdTree
         // Recursively search right/top (if it could contain a closer point)
         // Organize method so that it begins by searching for query point
         // Keep shortestDistanceFoundSoFar variable as well as championNearestNeighbor
-        return nearest(root, p, Double.MAX_VALUE, null);
+        //return nearest(root, p, Double.MAX_VALUE, root.p);
+        if (isEmpty()) return null;
+        return nearest(root, p, root.p);
     }
 
-    private Point2D nearest(Node node, Point2D p, Double shortestDistance, Point2D championNearestNeighbor)
+    private Point2D nearest(Node node, Point2D p,  Point2D nearestNeighbor)
+     //Node x, Point2D p, Point2D mp, boolean vert)
     {
-        if (node.p.distanceSquaredTo(p) < shortestDistance)
+        if (node == null) return nearestNeighbor;
+
+        if (node.p.distanceSquaredTo(p) < p.distanceSquaredTo(nearestNeighbor))
         {
-            shortestDistance = node.p.distanceSquaredTo(p);
-            championNearestNeighbor = node.p;
+            nearestNeighbor = node.p;
         }
 
-        if (node.lb != null && node.lb.p.distanceSquaredTo(p) < shortestDistance) nearest(node.lb, p, shortestDistance, championNearestNeighbor);
-        if (node.rt != null && node.rt.p.distanceSquaredTo(p) < shortestDistance) nearest(node.rt, p, shortestDistance, championNearestNeighbor);
+        if (node.direction == Node.Direction.VERTICAL)
+        {
+            if (p.x() < node.p.x())
+            {
+                // Checking left subtree first
+                nearestNeighbor = nearest(node.lb, p, nearestNeighbor);
+                if (node.rt != null && node.rt.rect.distanceSquaredTo(p) < nearestNeighbor.distanceSquaredTo(p))
+                {
+                    nearestNeighbor = nearest(node.rt, p, nearestNeighbor);
+                }
 
-        return championNearestNeighbor;
+            }
+            else
+            {
+                // Checking right subtree first
+                nearestNeighbor = nearest(node.rt, p, nearestNeighbor);
+                if (node.lb != null && node.lb.rect.distanceSquaredTo(p) < nearestNeighbor.distanceSquaredTo(p))
+                {
+                    nearestNeighbor = nearest(node.lb, p, nearestNeighbor);
+                }
+            }
+        }
+        else
+        {
+            if (p.y() > node.p.y())
+            {
+                // Checking left subtree first
+                nearestNeighbor = nearest(node.lb, p, nearestNeighbor);
+                if (node.rt != null && node.rt.rect.distanceSquaredTo(p) < nearestNeighbor.distanceSquaredTo(p))
+                {
+                    nearestNeighbor = nearest(node.rt, p, nearestNeighbor);
+                }
+            }
+            else
+            {
+                // Checking right subtree first
+                nearestNeighbor = nearest(node.rt, p, nearestNeighbor);
+                if (node.lb != null && node.lb.rect.distanceSquaredTo(p) < nearestNeighbor.distanceSquaredTo(p))
+                {
+                    nearestNeighbor = nearest(node.lb, p, nearestNeighbor);
+                }
+            }
+        }
+
+        return nearestNeighbor;
     }
 
     public static void main(String[] args)

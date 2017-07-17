@@ -40,6 +40,7 @@ public class NearestNeighborVisualizer {
             double x = StdDraw.mouseX();
             double y = StdDraw.mouseY();
             Point2D query = new Point2D(x, y);
+            System.out.println("Query point: x:" + x + " y:" + y);
 
             // draw all of the points
             StdDraw.clear();
@@ -50,12 +51,16 @@ public class NearestNeighborVisualizer {
             // draw in red the nearest neighbor (using brute-force algorithm)
             StdDraw.setPenRadius(0.03);
             StdDraw.setPenColor(StdDraw.RED);
-            brute.nearest(query).draw();
+            Point2D brutePoint = brute.nearest(query);
+            brutePoint.draw();
+            System.out.println("Brute Point: x:" + brutePoint.x() + " y:" + brutePoint.y());
             StdDraw.setPenRadius(0.02);
 
             // draw in blue the nearest neighbor (using kd-tree algorithm)
             StdDraw.setPenColor(StdDraw.BLUE);
-            kdtree.nearest(query).draw();
+            Point2D kdTreePoint = kdtree.nearest(query);
+            kdTreePoint.draw();
+            System.out.println("KdTree Point: x:" + kdTreePoint.x() + " y:" + kdTreePoint.y());
             StdDraw.show();
             StdDraw.pause(40);
         }
