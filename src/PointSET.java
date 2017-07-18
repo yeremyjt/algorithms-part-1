@@ -1,14 +1,11 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.TreeSet;
 
 public class PointSET
 {
-    private TreeSet<Point2D> treeSet;
+    final private TreeSet<Point2D> treeSet;
 
     public PointSET()
     {
@@ -63,7 +60,7 @@ public class PointSET
     public Point2D nearest(Point2D p)
     {
         if (p == null) throw new IllegalArgumentException();
-        Double shortestDistance = Double.MAX_VALUE;
+        double shortestDistance = Double.MAX_VALUE;
         Point2D nearestNeighbor = null;
 
         for (Point2D point : treeSet)
@@ -76,10 +73,5 @@ public class PointSET
         }
 
         return nearestNeighbor;
-    }
-
-    public static void main(String[] args)
-    {
-
     }
 }

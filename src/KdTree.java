@@ -12,11 +12,11 @@ public class KdTree
 
     private static class Node
     {
-        private Point2D p;
-        private RectHV rect;
+        final private Point2D p;
+        final private RectHV rect;
         private Node lb;
         private Node rt;
-        Direction direction;
+        private Direction direction;
 
         public Node(Point2D p, RectHV rect, Node lb, Node rt, Direction direction)
         {
@@ -58,7 +58,7 @@ public class KdTree
                 return null;
             }
             size++;
-            RectHV rectHV = new RectHV(xmin,ymin, xmax, ymax);
+            RectHV rectHV = new RectHV(xmin, ymin, xmax, ymax);
             return new Node(p, rectHV, null, null, direction);
         }
 
@@ -103,7 +103,7 @@ public class KdTree
                         p,
                         Node.Direction.VERTICAL,
                         node.rect.xmin(),
-                        node.p.y(), //ymin
+                        node.p.y(), // ymin
                         node.rect.xmax(),
                         node.rect.ymax()
                 );
@@ -191,18 +191,11 @@ public class KdTree
 
     public Point2D nearest(Point2D p)
     {
-        // Check distance from query from point in node to query point
-        // Recursively search left/bottom (if it could contain a closer point)
-        // Recursively search right/top (if it could contain a closer point)
-        // Organize method so that it begins by searching for query point
-        // Keep shortestDistanceFoundSoFar variable as well as championNearestNeighbor
-        //return nearest(root, p, Double.MAX_VALUE, root.p);
         if (isEmpty()) return null;
         return nearest(root, p, root.p);
     }
 
     private Point2D nearest(Node node, Point2D p,  Point2D nearestNeighbor)
-     //Node x, Point2D p, Point2D mp, boolean vert)
     {
         if (node == null) return nearestNeighbor;
 
